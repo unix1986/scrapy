@@ -1,7 +1,9 @@
 """
 Scrapy - a screen scraping framework written in Python
 """
+# -*- coding: utf-8 -*-
 
+# 验证版本号，python版本需求验证，忽略warning信息，判断可用可选包，
 __all__ = ['__version__', 'version_info', 'optional_features', 'twisted_version',
            'Spider', 'Request', 'FormRequest', 'Selector', 'Item', 'Field']
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Base class for Scrapy spiders
 
@@ -25,21 +26,23 @@ class Spider(object_ref):
     def __init__(self, name=None, **kwargs):
         if name is not None:
             self.name = name
-        elif not getattr(self, 'name', None):
+        elif not getattr(self, 'name', None): # XXX 继承类中是否在类内设置了name
             raise ValueError("%s must have a name" % type(self).__name__)
-        self.__dict__.update(kwargs)
+        self.__dict__.update(kwargs) # 并集
         if not hasattr(self, 'start_urls'):
             self.start_urls = []
 
+    # 打日志
     def log(self, message, level=log.DEBUG, **kw):
         """Log the given messages at the given log level. Always use this
         method to send log messages from your spider
         """
         log.msg(message, spider=self, level=level, **kw)
 
+    # 返回一个与crawler关联的当前spider类对象
     @classmethod
     def from_crawler(cls, crawler, *args, **kwargs):
-        spider = cls(*args, **kwargs)
+        spider = cls(*args, **kwargs) # 创建对象
         spider._set_crawler(crawler)
         return spider
 
@@ -52,11 +55,12 @@ class Spider(object_ref):
                                              "crawler"
         self._set_crawler(crawler)
 
-    def _set_crawler(self, crawler):
+    def _set_crawler(self, crawler): # 关联crawler和spider
         self.crawler = crawler
         self.settings = crawler.settings
         crawler.signals.connect(self.close, signals.spider_closed)
 
+    # request url generator
     def start_requests(self):
         for url in self.start_urls:
             yield self.make_requests_from_url(url)
